@@ -4,6 +4,7 @@
 package org.oddjob.hsql;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -12,8 +13,20 @@ import java.util.Properties;
 
 import junit.framework.TestCase;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.oddjob.ConsoleCapture;
+import org.oddjob.FailedToStopException;
+import org.oddjob.Oddjob;
+import org.oddjob.OddjobLookup;
 import org.oddjob.OurDirs;
+import org.oddjob.Stateful;
+import org.oddjob.arooa.convert.ArooaConversionException;
+import org.oddjob.arooa.reflect.ArooaPropertyException;
+import org.oddjob.arooa.xml.XMLConfiguration;
+import org.oddjob.jobs.structural.SequentialJob;
+import org.oddjob.state.JobState;
+import org.oddjob.state.ParentState;
 
 public class HsqldbJobTest extends TestCase {
 	private static final Logger logger = Logger.getLogger(HsqldbJobTest.class);
@@ -27,7 +40,8 @@ public class HsqldbJobTest extends TestCase {
 		logger.info(this.getClass().getClassLoader().toString());
 		
 		OurDirs dirs = new OurDirs();
-		File dir = dirs.relative("work/sql");
+		File dir = dirs.relative("work");
+		
 		dir.mkdirs();
 		
 		workDir = dir.getPath();
@@ -36,7 +50,7 @@ public class HsqldbJobTest extends TestCase {
 	public void testStartStop() throws Exception {
 		HsqldbJob test = new HsqldbJob();
 		
-		test.setDatabase("mydb", "file:" + workDir + "/hsql");
+		test.setDatabase("mydb", "file:" + workDir + "/test/hsql");
 		
 		Properties props = new Properties();
 		props.setProperty("server.port", "11001");
@@ -76,4 +90,75 @@ public class HsqldbJobTest extends TestCase {
 		}
 	}
 		
+	public void testExample() throws ArooaPropertyException, ArooaConversionException, FailedToStopException, IOException {
+		
+		File exampleDir = new File(workDir, "exmample");
+		
+		if (exampleDir.exists()) {
+			FileUtils.forceDelete(exampleDir);
+		}
+		
+		Properties properties = new Properties();
+		properties.setProperty("work.dir", exampleDir.getPath());
+		
+		
+    	Oddjob oddjob = new Oddjob();
+    	oddjob.setConfiguration(new XMLConfiguration(
+    			"org/oddjob/hsql/HSQLExample.xml",
+    			getClass().getClassLoader()));
+    	oddjob.setProperties(properties);
+    	
+    	ConsoleCapture console = new ConsoleCapture();
+    	console.capture(Oddjob.CONSOLE);
+    	
+    	oddjob.run();
+
+    	assertEquals(ParentState.ACTIVE, oddjob.lastStateEvent().getState());
+    	
+    	OddjobLookup lookup = new OddjobLookup(oddjob);
+   
+    	// Setup
+    	
+    	SequentialJob setup = lookup.lookup("setup", SequentialJob.class);
+    	
+    	setup.run();
+    	
+    	assertEquals(ParentState.COMPLETE, setup.lastStateEvent().getState());
+    	
+    	// Single Query
+    	
+    	SequentialJob singleQuery = lookup.lookup("single-query", SequentialJob.class);
+    	
+    	singleQuery.run();
+    	
+    	assertEquals(ParentState.COMPLETE, singleQuery.lastStateEvent().getState());
+    	    	
+    	// Single Query
+    	
+    	SequentialJob allQuery = lookup.lookup("all-query", SequentialJob.class);
+    	
+    	allQuery.run();
+    	
+    	assertEquals(ParentState.COMPLETE, allQuery.lastStateEvent().getState());
+    	    	
+    	// Clean up
+    	
+    	Runnable cleanUp = lookup.lookup("clean-up", Runnable.class);
+    	
+    	cleanUp.run();
+    	
+    	assertEquals(JobState.COMPLETE, ((Stateful) cleanUp).lastStateEvent().getState());
+    	    	
+    	// done. 
+    	
+    	console.close();
+    		
+    	console.dump(logger);
+    
+    	oddjob.stop();
+    	
+    	assertEquals(ParentState.COMPLETE, oddjob.lastStateEvent().getState());
+    	
+    	oddjob.destroy();
+	}
 }

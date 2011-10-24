@@ -21,7 +21,10 @@ import org.hsqldb.server.ServerAcl.AclFormatException;
  * 
  * @oddjob.example 
  * 
- * Please see the {@link org.oddjob.sql.SQLJob} examples.
+ * Using an HSQL Server and an HSQL connection to run
+ * lots of SQL.
+ * 
+ * {@oddjob.xml.resource org/oddjob/hsql/HSQLExample.xml}
  * 
  * @author Rob Gordon.
  */
@@ -196,8 +199,7 @@ public class HsqldbJob {
 		server.stop();
 		
 		synchronized (server) {
-			while (server.getState() != 16
-					&& server.getState() == 1) { 
+			while (server.getState() != 16) { 
 				try {
 					logger.debug("Waiting for server to shutdown...");
 					server.wait(1000);
