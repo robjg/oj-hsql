@@ -5,7 +5,7 @@
             <jobs>
                 <hsql:hsqldb name="Hsqldb Server" xmlns:hsql="http://rgordon.co.uk/oddjob/hsql">
                     <database>
-                        <value key="mydb" value="${work.dir}/hsqldb/mydb"/>
+                        <value key="mydb" value="${work.dir}/mydb"/>
                     </database>
                     <properties>
                         <properties>

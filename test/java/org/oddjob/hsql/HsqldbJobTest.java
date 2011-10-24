@@ -92,7 +92,7 @@ public class HsqldbJobTest extends TestCase {
 		
 	public void testExample() throws ArooaPropertyException, ArooaConversionException, FailedToStopException, IOException {
 		
-		File exampleDir = new File(workDir, "exmample");
+		File exampleDir = new File(workDir, "example");
 		
 		if (exampleDir.exists()) {
 			FileUtils.forceDelete(exampleDir);
@@ -144,6 +144,53 @@ public class HsqldbJobTest extends TestCase {
     	// Clean up
     	
     	Runnable cleanUp = lookup.lookup("clean-up", Runnable.class);
+    	
+    	cleanUp.run();
+    	
+    	assertEquals(JobState.COMPLETE, ((Stateful) cleanUp).lastStateEvent().getState());
+    	    	
+    	// done. 
+    	
+    	console.close();
+    		
+    	console.dump(logger);
+    
+    	oddjob.stop();
+    	
+    	assertEquals(ParentState.COMPLETE, oddjob.lastStateEvent().getState());
+    	
+    	oddjob.destroy();
+	}
+	
+	public void testPersistExample() throws ArooaPropertyException, ArooaConversionException, FailedToStopException, IOException {
+		
+		File exampleDir = new File(workDir, "persist");
+		
+		if (exampleDir.exists()) {
+			FileUtils.forceDelete(exampleDir);
+		}
+		
+		Properties properties = new Properties();
+		properties.setProperty("work.dir", exampleDir.getPath());
+		
+		
+    	Oddjob oddjob = new Oddjob();
+    	oddjob.setConfiguration(new XMLConfiguration(
+    			"org/oddjob/hsql/OddjobPersisterService.xml",
+    			getClass().getClassLoader()));
+    	oddjob.setProperties(properties);
+    	
+    	ConsoleCapture console = new ConsoleCapture();
+    	console.capture(Oddjob.CONSOLE);
+    	
+    	oddjob.run();
+
+    	assertEquals(ParentState.ACTIVE, oddjob.lastStateEvent().getState());
+    	
+    	// Clean up
+    	
+    	Runnable cleanUp = new OddjobLookup(oddjob).lookup(
+    			"clean-up", Runnable.class);
     	
     	cleanUp.run();
     	
