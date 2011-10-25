@@ -26,6 +26,13 @@ import org.hsqldb.server.ServerAcl.AclFormatException;
  * 
  * {@oddjob.xml.resource org/oddjob/hsql/HSQLExample.xml}
  * 
+ * @oddjob.example 
+ * 
+ * Using an HSQL Server to provide a 
+ * {@link org.oddjob.sql.SQLPersisterService}.
+ * 
+ * {@oddjob.xml.resource org/oddjob/hsql/OddjobPersisterService.xml}
+ * 
  * @author Rob Gordon.
  */
 public class HsqldbJob {
