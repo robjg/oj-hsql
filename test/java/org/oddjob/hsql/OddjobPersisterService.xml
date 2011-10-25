@@ -26,8 +26,8 @@
                         <value value="${vars.persisterConnection}"/>
                     </connection>
                     <input>
-                        <buffer><![CDATA[CREATE TABLE oddjob( path VARCHAR(20),
-id VARCHAR(20), job BLOB,
+                        <buffer><![CDATA[CREATE TABLE oddjob( path VARCHAR(32),
+id VARCHAR(32), job BLOB,
 CONSTRAINT oddjob_pk PRIMARY KEY (path, id))]]></buffer>
                     </input>
                 </sql>

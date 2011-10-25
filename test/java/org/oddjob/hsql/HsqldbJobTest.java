@@ -3,6 +3,7 @@
  */
 package org.oddjob.hsql;
 
+import java.beans.PropertyVetoException;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
@@ -162,7 +163,7 @@ public class HsqldbJobTest extends TestCase {
     	oddjob.destroy();
 	}
 	
-	public void testPersistExample() throws ArooaPropertyException, ArooaConversionException, FailedToStopException, IOException {
+	public void testPersistExample() throws ArooaPropertyException, ArooaConversionException, FailedToStopException, IOException, PropertyVetoException {
 		
 		File exampleDir = new File(workDir, "persist");
 		
@@ -185,11 +186,23 @@ public class HsqldbJobTest extends TestCase {
     	
     	oddjob.run();
 
+//    	OddjobExplorer explorer = new OddjobExplorer();
+//    	explorer.setOddjob(oddjob);
+//    	explorer.run();
+//    	
     	assertEquals(ParentState.ACTIVE, oddjob.lastStateEvent().getState());
+    	
+    	OddjobLookup lookup = new OddjobLookup(oddjob);
+    	
+    	Oddjob innerOddjob = lookup.lookup("database-persist-example",
+    			Oddjob.class);
+    	
+    	assertEquals(ParentState.COMPLETE, 
+    			innerOddjob.lastStateEvent().getState());
     	
     	// Clean up
     	
-    	Runnable cleanUp = new OddjobLookup(oddjob).lookup(
+    	Runnable cleanUp = lookup.lookup(
     			"clean-up", Runnable.class);
     	
     	cleanUp.run();
