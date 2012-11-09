@@ -2,6 +2,7 @@ package org.oddjob.hsql;
 
 import junit.framework.TestCase;
 
+import org.apache.commons.beanutils.DynaBean;
 import org.oddjob.Helper;
 import org.oddjob.OddjobDescriptorFactory;
 import org.oddjob.arooa.ArooaDescriptor;
@@ -50,10 +51,10 @@ public class HsqldbDesFaTest extends TestCase {
 		
 		assertEquals(HsqldbDesign.class, design.getClass());
 		
-		HsqldbJob test = (HsqldbJob) Helper.createComponentFromConfiguration(
+		DynaBean test = (DynaBean) Helper.createComponentFromConfiguration(
 				design.getArooaContext().getConfigurationNode());
 		
-		assertEquals("file:work/sql/hsql", test.getDatabase("mydb"));
+		assertEquals("file:work/sql/hsql", test.get("database", "mydb"));
 		
 	}
 
