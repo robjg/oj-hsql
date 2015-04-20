@@ -114,7 +114,7 @@ public class HsqldbJobTest extends TestCase {
     	
     	oddjob.run();
 
-    	assertEquals(ParentState.STARTED, oddjob.lastStateEvent().getState());
+    	assertEquals(ParentState.ACTIVE, oddjob.lastStateEvent().getState());
     	
     	OddjobLookup lookup = new OddjobLookup(oddjob);
    
@@ -190,7 +190,7 @@ public class HsqldbJobTest extends TestCase {
 //    	explorer.setOddjob(oddjob);
 //    	explorer.run();
 //    	
-    	assertEquals(ParentState.STARTED, oddjob.lastStateEvent().getState());
+    	assertEquals(ParentState.ACTIVE, oddjob.lastStateEvent().getState());
     	
     	OddjobLookup lookup = new OddjobLookup(oddjob);
     	
