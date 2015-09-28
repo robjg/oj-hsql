@@ -110,7 +110,7 @@ public class HsqldbJobTest extends TestCase {
     	oddjob.setProperties(properties);
     	
     	ConsoleCapture console = new ConsoleCapture();
-    	console.capture(Oddjob.CONSOLE);
+    	console.captureConsole();
     	
     	oddjob.run();
 
@@ -182,7 +182,7 @@ public class HsqldbJobTest extends TestCase {
     	oddjob.setProperties(properties);
     	
     	ConsoleCapture console = new ConsoleCapture();
-    	console.capture(Oddjob.CONSOLE);
+    	console.captureConsole();
     	
     	oddjob.run();
 

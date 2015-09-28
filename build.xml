@@ -1,5 +1,10 @@
-<project default="jar" basedir="." name="HSQL Oddball">
+<project xmlns:ivy="antlib:org.apache.ivy.ant"
+	default="jar" basedir="." name="HSQL Oddball">
 
+	<taskdef resource="org/apache/ivy/ant/antlib.xml"
+	                 uri="antlib:org.apache.ivy.ant" 
+		classpath="../oj-assembly/antlibs/ivy-2.4.0.jar"/>
+	
 	<!-- =================================================================== -->
 	<!-- Initialization target                                               -->
 	<!-- =================================================================== -->
@@ -7,14 +12,15 @@
 
 		<tstamp/>
 
-
 		<!-- =================================================================== -->
 		<!-- Properties                                                          -->
 		<!-- =================================================================== -->
 
+		<property file="../oj-assembly/version.properties"/>
+		
 		<property name="Name"     value="HSQL Oddball"/>
 		<property name="name"     value="oj-hsql"/>
-		<property name="build.version"  value="0.0.0"/>
+		<property name="build.version"  value="${project.version}"/>
 
 		<property name="oddjob.src"          value="../oddjob"/>
 		
@@ -60,41 +66,35 @@
 		<filter token="userguide" value="../userguide"/>
 		<filter token="devguide" value="../devguide"/>
 
-		<!-- =================================================================== -->
-		<!-- Identify Classpath                                                 -->
-		<!-- =================================================================== -->
+	</target>
 
+	<!-- =================================================================== -->
+	<!-- Prepare for the build                                               -->
+	<!-- =================================================================== -->
+	<target name="prepare" depends="init">
+
+		<ivy:resolve conf="provided" refresh="true" />
+		
+		<ivy:resolve conf="test" refresh="true" />
+		
+		<ivy:cachepath pathid="provided-cachepath" conf="provided" />
+				
+		<ivy:cachepath pathid="test-cachepath" conf="test" />
+			
 		<path id="classpath">
 			<fileset dir="${lib.dir}">
 				<include name="*.jar"/>
 				<exclude name="${name}*.jar"/>
 			</fileset>
-			<fileset file="${oddjob.src}/run-oddjob.jar"/>
-			<fileset dir="${oddjob.src}/lib">
-				<include name="*.jar"/>
-			</fileset>
+			<path refid="provided-cachepath"/>
 		</path>
 
 		<path id="test-classpath">
 			<path refid="classpath"/>
-			<pathelement location="${build.classes}" />
-			<pathelement location="${oddjob.src}/build/tools/classes"/>
-			<fileset dir="${oddjob.src}/opt/lib">
-				<include name="*.jar"/>
-			</fileset>
-			<fileset dir="${oddjob.src}/test/lib">
-				<include name="*.jar"/>
-				<exclude name="hsqldb*.jar"/>
-			</fileset>
+			<pathelement path="${build.classes}" />
+			<path refid="test-cachepath"/>
 		</path>
-
-	</target>
-
-	<!-- =================================================================== -->
-	<!-- Prepares the build directory                                        -->
-	<!-- =================================================================== -->
-	<target name="prepare" depends="init">
-
+		
 		<mkdir dir="${build.dir}"/>
 
 	</target>
@@ -238,6 +238,13 @@
 			<sysproperty key="oddjob.home" value="${oddjob.home}"/>
 			<sysproperty key="ant.file" value="${ant.file}"/>
 		</junit>
+	</target>
+	
+	<!-- =================================================================== -->
+	<!-- Publish the jars in local ivy                                       -->
+	<!-- =================================================================== -->
+	<target name="install" depends="jar">
+		
 	</target>
 	
 	<!-- =================================================================== -->
