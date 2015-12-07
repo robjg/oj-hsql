@@ -110,49 +110,48 @@ public class HsqldbJobTest extends TestCase {
     	oddjob.setProperties(properties);
     	
     	ConsoleCapture console = new ConsoleCapture();
-    	console.captureConsole();
-    	
-    	oddjob.run();
+    	try (ConsoleCapture.Close close = console.captureConsole()) {
 
-    	assertEquals(ParentState.STARTED, oddjob.lastStateEvent().getState());
-    	
-    	OddjobLookup lookup = new OddjobLookup(oddjob);
-   
-    	// Setup
-    	
-    	SequentialJob setup = lookup.lookup("setup", SequentialJob.class);
-    	
-    	setup.run();
-    	
-    	assertEquals(ParentState.COMPLETE, setup.lastStateEvent().getState());
-    	
-    	// Single Query
-    	
-    	SequentialJob singleQuery = lookup.lookup("single-query", SequentialJob.class);
-    	
-    	singleQuery.run();
-    	
-    	assertEquals(ParentState.COMPLETE, singleQuery.lastStateEvent().getState());
-    	    	
-    	// Single Query
-    	
-    	SequentialJob allQuery = lookup.lookup("all-query", SequentialJob.class);
-    	
-    	allQuery.run();
-    	
-    	assertEquals(ParentState.COMPLETE, allQuery.lastStateEvent().getState());
-    	    	
-    	// Clean up
-    	
-    	Runnable cleanUp = lookup.lookup("clean-up", Runnable.class);
-    	
-    	cleanUp.run();
-    	
-    	assertEquals(JobState.COMPLETE, ((Stateful) cleanUp).lastStateEvent().getState());
-    	    	
-    	// done. 
-    	
-    	console.close();
+    		oddjob.run();
+
+    		assertEquals(ParentState.STARTED, oddjob.lastStateEvent().getState());
+
+    		OddjobLookup lookup = new OddjobLookup(oddjob);
+
+    		// Setup
+
+    		SequentialJob setup = lookup.lookup("setup", SequentialJob.class);
+
+    		setup.run();
+
+    		assertEquals(ParentState.COMPLETE, setup.lastStateEvent().getState());
+
+    		// Single Query
+
+    		SequentialJob singleQuery = lookup.lookup("single-query", SequentialJob.class);
+
+    		singleQuery.run();
+
+    		assertEquals(ParentState.COMPLETE, singleQuery.lastStateEvent().getState());
+
+    		// Single Query
+
+    		SequentialJob allQuery = lookup.lookup("all-query", SequentialJob.class);
+
+    		allQuery.run();
+
+    		assertEquals(ParentState.COMPLETE, allQuery.lastStateEvent().getState());
+
+    		// Clean up
+
+    		Runnable cleanUp = lookup.lookup("clean-up", Runnable.class);
+
+    		cleanUp.run();
+
+    		assertEquals(JobState.COMPLETE, ((Stateful) cleanUp).lastStateEvent().getState());
+
+    		// done. 
+    	}
     		
     	console.dump(logger);
     
@@ -182,36 +181,35 @@ public class HsqldbJobTest extends TestCase {
     	oddjob.setProperties(properties);
     	
     	ConsoleCapture console = new ConsoleCapture();
-    	console.captureConsole();
-    	
-    	oddjob.run();
+    	try (ConsoleCapture.Close close = console.captureConsole()) {
 
-//    	OddjobExplorer explorer = new OddjobExplorer();
-//    	explorer.setOddjob(oddjob);
-//    	explorer.run();
-//    	
-    	assertEquals(ParentState.STARTED, oddjob.lastStateEvent().getState());
-    	
-    	OddjobLookup lookup = new OddjobLookup(oddjob);
-    	
-    	Oddjob innerOddjob = lookup.lookup("database-persist-example",
-    			Oddjob.class);
-    	
-    	assertEquals(ParentState.COMPLETE, 
-    			innerOddjob.lastStateEvent().getState());
-    	
-    	// Clean up
-    	
-    	Runnable cleanUp = lookup.lookup(
-    			"clean-up", Runnable.class);
-    	
-    	cleanUp.run();
-    	
-    	assertEquals(JobState.COMPLETE, ((Stateful) cleanUp).lastStateEvent().getState());
-    	    	
-    	// done. 
-    	
-    	console.close();
+    		oddjob.run();
+
+    		//    	OddjobExplorer explorer = new OddjobExplorer();
+    		//    	explorer.setOddjob(oddjob);
+    		//    	explorer.run();
+    		//    	
+    		assertEquals(ParentState.STARTED, oddjob.lastStateEvent().getState());
+
+    		OddjobLookup lookup = new OddjobLookup(oddjob);
+
+    		Oddjob innerOddjob = lookup.lookup("database-persist-example",
+    				Oddjob.class);
+
+    		assertEquals(ParentState.COMPLETE, 
+    				innerOddjob.lastStateEvent().getState());
+
+    		// Clean up
+
+    		Runnable cleanUp = lookup.lookup(
+    				"clean-up", Runnable.class);
+
+    		cleanUp.run();
+
+    		assertEquals(JobState.COMPLETE, ((Stateful) cleanUp).lastStateEvent().getState());
+
+    		// done. 
+    	}
     		
     	console.dump(logger);
     
