@@ -4,7 +4,7 @@
 	<configurations>
         <conf name="default" visibility="public"></conf>
         <conf name="provided" visibility="public"></conf>
-        <conf name="test" visibility="public"></conf>
+        <conf name="test" extends="default,provided" visibility="public"></conf>
 	</configurations>  
         
 	<dependencies>
@@ -12,6 +12,9 @@
 	    <dependency org="uk.co.rgordon" name="oddjob" rev="latest.integration"
 	    	conf="provided->default" />
 	    	
+		<dependency org="org.hsqldb" name="hsqldb" rev="2.3.3"
+			conf="default->default" />
+			
 	    <dependency org="uk.co.rgordon" name="arooa" rev="latest.integration"
 	    	conf="test->test" />
 	    	
