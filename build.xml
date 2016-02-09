@@ -263,7 +263,7 @@
 
 		<copy todir="${to.dir}/lib">
 			<fileset dir="${lib.dir}">
-				<exclude name='${jar.name}'/>
+				<exclude name='*.jar'/>
 			</fileset>
 		</copy>
 
@@ -320,7 +320,7 @@
 		<delete dir="${build.dir}"/>
 		<delete>
 			<fileset dir="${lib.dir}">
-			 <include name="${name}*.jar"/>
+			 <include name="*.jar"/>
 			</fileset>
 		</delete>
 	</target>
