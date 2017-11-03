@@ -1,6 +1,8 @@
 package org.oddjob.hsql;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+
+import org.junit.Assert;
 
 import org.apache.commons.beanutils.DynaBean;
 import org.oddjob.OddjobDescriptorFactory;
@@ -14,10 +16,11 @@ import org.oddjob.arooa.standard.StandardArooaSession;
 import org.oddjob.arooa.xml.XMLConfiguration;
 import org.oddjob.tools.OddjobTestHelper;
 
-public class HsqldbDesFaTest extends TestCase {
+public class HsqldbDesFaTest extends Assert {
 
 	DesignInstance design;
 	
+    @Test
 	public void testCreate() throws ArooaParseException {
 		
 		String xml =  

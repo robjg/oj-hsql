@@ -2,6 +2,10 @@
  * (c) Rob Gordon 2005
  */
 package org.oddjob.hsql;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TestName;
 
 import java.beans.PropertyVetoException;
 import java.io.File;
@@ -12,7 +16,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Properties;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -29,15 +33,17 @@ import org.oddjob.state.ParentState;
 import org.oddjob.tools.ConsoleCapture;
 import org.oddjob.tools.OurDirs;
 
-public class HsqldbJobTest extends TestCase {
+public class HsqldbJobTest extends Assert {
 	private static final Logger logger = Logger.getLogger(HsqldbJobTest.class);
 	
 	String workDir;
 
-	@Override
-	protected void setUp() throws Exception {
+	@Rule public TestName name = new TestName();
 
-		logger.info("-------------  " + getName() + "  ---------------------");
+	@Before
+    public void setUp() throws Exception {
+
+		logger.info("-------------  " + name.getMethodName() + "  ---------------------");
 		logger.info(this.getClass().getClassLoader().toString());
 		
 		OurDirs dirs = new OurDirs();
@@ -48,6 +54,7 @@ public class HsqldbJobTest extends TestCase {
 		workDir = dir.getPath();
 	}
 	
+    @Test
 	public void testStartStop() throws Exception {
 		HsqldbJob test = new HsqldbJob();
 		
@@ -91,6 +98,7 @@ public class HsqldbJobTest extends TestCase {
 		}
 	}
 		
+    @Test
 	public void testExample() throws ArooaPropertyException, ArooaConversionException, FailedToStopException, IOException {
 		
 		File exampleDir = new File(workDir, "example");
@@ -162,6 +170,7 @@ public class HsqldbJobTest extends TestCase {
     	oddjob.destroy();
 	}
 	
+    @Test
 	public void testPersistExample() throws ArooaPropertyException, ArooaConversionException, FailedToStopException, IOException, PropertyVetoException {
 		
 		File exampleDir = new File(workDir, "persist");
