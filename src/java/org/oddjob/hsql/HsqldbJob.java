@@ -9,7 +9,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.hsqldb.Server;
 import org.hsqldb.persist.HsqlProperties;
 import org.hsqldb.server.ServerAcl.AclFormatException;
@@ -37,7 +38,7 @@ import org.hsqldb.server.ServerAcl.AclFormatException;
  */
 public class HsqldbJob {
 
-	private static final Logger logger = Logger.getLogger(HsqldbJob.class);
+	private static final Logger logger = LoggerFactory.getLogger(HsqldbJob.class);
 	
 	class ServerWithStateNotify extends Server {
 		synchronized protected void setState(int state) {

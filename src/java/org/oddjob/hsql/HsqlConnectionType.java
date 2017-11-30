@@ -9,7 +9,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.oddjob.arooa.types.ValueFactory;
 
 /**
@@ -24,7 +25,7 @@ import org.oddjob.arooa.types.ValueFactory;
 public class HsqlConnectionType implements ValueFactory<Connection>, Serializable {
 	private final static long serialVersionUID = 20070315;
 	
-	private static final Logger logger = Logger.getLogger(HsqlConnectionType.class);
+	private static final Logger logger = LoggerFactory.getLogger(HsqlConnectionType.class);
 		
 	public static final String DRIVER = "org.hsqldb.jdbcDriver";
 	

@@ -19,7 +19,8 @@ import java.util.Properties;
 import org.junit.Assert;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.oddjob.FailedToStopException;
 import org.oddjob.Oddjob;
 import org.oddjob.OddjobLookup;
@@ -34,7 +35,7 @@ import org.oddjob.tools.ConsoleCapture;
 import org.oddjob.tools.OurDirs;
 
 public class HsqldbJobTest extends Assert {
-	private static final Logger logger = Logger.getLogger(HsqldbJobTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(HsqldbJobTest.class);
 	
 	String workDir;
 
