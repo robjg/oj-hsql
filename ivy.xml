@@ -18,9 +18,6 @@
 	    <dependency org="uk.co.rgordon" name="arooa" rev="latest.integration"
 	    	conf="test->test" />
 	    	
-	    <dependency org="uk.co.rgordon" name="oddjob" rev="latest.integration"
-	    	conf="test->tools" />
-	    	
 	</dependencies>
   
 </ivy-module>
