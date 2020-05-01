@@ -1,0 +1,5 @@
+Oddjob HSQLDB Jobs
+Copyright 2002-2020 R Gordon Ltd
+
+This product includes software developed by
+The HSQL Development Group (https://www.hsqldb.org).

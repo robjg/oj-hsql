@@ -9,13 +9,13 @@
         
 	<dependencies>
 	
-	    <dependency org="uk.co.rgordon" name="oddjob" rev="latest.integration"
+	    <dependency org="uk.co.rgordon" name="oddjob" rev="${project.version}"
 	    	conf="provided->default" />
 	    	
-		<dependency org="org.hsqldb" name="hsqldb" rev="2.3.3"
+		<dependency org="org.hsqldb" name="hsqldb" rev="${hsql.version}"
 			conf="default->default" />
 			
-	    <dependency org="uk.co.rgordon" name="arooa" rev="latest.integration"
+	    <dependency org="uk.co.rgordon" name="arooa" rev="${project.version}"
 	    	conf="test->test" />
 	    	
 	</dependencies>
